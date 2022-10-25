@@ -10,7 +10,7 @@ x1 = 0
 y1 = 0
 
 points = 50
-radius = 25
+radius = 40
 
 
 
@@ -25,24 +25,24 @@ def Desenha():
     glBegin(GL_POLYGON)
     glColor3f(0,0,1)
     for i in range(points):
-        cos = radius * math.cos(i * 2 * math.pi / points) + x1+50
-        sin = radius * math.sin(i * 2 * math.pi / points) + y1+50
+        cos = radius * math.cos(i * 2 * math.pi / points) + x1+2*radius
+        sin = radius * math.sin(i * 2 * math.pi / points) + y1+2*radius
         glVertex2f(cos, sin)
     glEnd()
 
     glColor(1,0,0)
     glBegin(GL_POLYGON)
-    glVertex2f(x1+45,y1+75)
-    glVertex2f(x1+55,y1+75)
-    glVertex2f(x1+55,y1+25)
-    glVertex2f(x1+45,y1+25)
+    glVertex2f(x1+1.8*radius,y1+3*radius)
+    glVertex2f(x1+2.2*radius,y1+3*radius)
+    glVertex2f(x1+2.2*radius,y1+radius)
+    glVertex2f(x1+1.8*radius,y1+radius)
     glEnd()
 
     glBegin(GL_POLYGON)
-    glVertex2f(x1+25,y1+45)
-    glVertex2f(x1+25,y1+55)
-    glVertex2f(x1+75,y1+55)
-    glVertex2f(x1+75,y1+45)
+    glVertex2f(x1+radius,y1+1.8*radius)
+    glVertex2f(x1+radius,y1+2.2*radius)
+    glVertex2f(x1+3*radius,y1+2.2*radius)
+    glVertex2f(x1+3*radius,y1+1.8*radius)
     glEnd()
    
     
@@ -68,7 +68,7 @@ def AlteraTamanhoJanela(w, h):
 
     # Estabelece a janela de seleção (left, right, bottom, top)     
     if (w <= h):
-        windowHeight = 250.0*h/w
+        windowHeight = 250*h/w
         windowWidth = 250.0
     else:
         windowWidth = 250.0*w/h

@@ -26,8 +26,10 @@ player_height = 10
 player1 = Player(-1,0,player_width,player_height)
 player2 = Player(1,0,player_width,player_height)
 
-ball = Ball(0,0,5,5,0.035)
-red_ball = Ball(0,0,5,5,0.025)
+points = 50
+
+ball = Ball(0,0,5,0.035)
+red_ball = Ball(0,0,5,0.025)
 
 def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
@@ -43,21 +45,43 @@ def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   glEnd()
 
 def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, points, radius
   if red:
-    glColor3f(.75, 0, 0)
+    glBegin(GL_POLYGON)
+    glColor3f(0,0,1)
+    for i in range(points):
+        cos = red_ball.radius * np.cos(i * 2 * np.pi / points) + x*window_coordinates + x_step
+        sin = red_ball.radius * np.sin(i * 2 * np.pi / points) + y*window_coordinates + y_step
+        glVertex2f(cos, sin)
+    glEnd()
+
+    glColor(1,0,0)
+    glBegin(GL_POLYGON)
+    glVertex2f(1.8*red_ball.radius - 2*red_ball.radius + x*window_coordinates + x_step,3*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(2.2*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,3*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(2.2*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(1.8*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    glVertex2f(red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,1.8*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,2.2*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(3*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,2.2*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(3*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,1.8*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glEnd()
+   
+
   else:
     glColor3f(.5, .5, .5)
 
-  glBegin(GL_QUADS)
-
-  glVertex2f(-1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
-  glVertex2f(-1*width + x*window_coordinates + x_step,1*height + y*window_coordinates + y_step)
-  glVertex2f(1*width + x*window_coordinates + x_step,1*height + y*window_coordinates + y_step)
-  glVertex2f(1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
-
-  glEnd()
-
+    glBegin(GL_POLYGON)
+    glColor3f(1,1,1)
+    for i in range(points):
+        cos = ball.radius * np.cos(i * 2 * np.pi / points) + x*window_coordinates + x_step
+        sin = 1.5*ball.radius * np.sin(i * 2 * np.pi / points) + y*window_coordinates + y_step
+        glVertex2f(cos, sin)
+    glEnd()
+   
 def Desenha():
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
   
@@ -97,12 +121,12 @@ def Timer(value):
   if not pause_game:
     if ball.x < 0:
         if (abs(ball.x) + abs(ball.xstep) >= 1-2*player_width/100) and (ball.y < player1.y + 0.1 and ball.y > player1.y - 0.1 ):
-          ball.xstep *= -1.1
+          ball.xstep *= -1.25
           ball.x += .075
 
     if ball.x > 0:
         if (abs(ball.x) + ball.xstep >= 1-2*player_width/100) and (ball.y < player2.y + 0.1 and ball.y > player2.y - 0.1 ):
-          ball.xstep *= -1.1
+          ball.xstep *= -1.25
           ball.x -= .075
     
     if abs(ball.y*window_coordinates) > window_coordinates-10:
@@ -134,13 +158,13 @@ def TimerRed(value):
 
     if red_ball.x < 0:
         if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-2*player_width/100) and (red_ball.y < player1.y + 0.1 and red_ball.y > player1.y - 0.1 ):
-          red_ball.xstep *= -1.1
+          red_ball.xstep *= -1.25
           red_ball.x += .075
           player1.score -= 1
 
     if red_ball.x > 0:
         if (abs(red_ball.x) + red_ball.xstep >= 1-2*player_width/100) and (red_ball.y < player2.y + 0.1 and red_ball.y > player2.y - 0.1 ):
-          red_ball.xstep *= -1.1
+          red_ball.xstep *= -1.25
           red_ball.x -= .075
           player2.score -= 1
 
