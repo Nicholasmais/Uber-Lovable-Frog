@@ -23,7 +23,7 @@ window_coordinates = 100
 player_width = 5
 player_height = 10
 
-player1 = Player(-1,0,.5,3.5)
+player1 = Player(-1,0,player_width/10,player_width*3/10)
 player2 = Player(1,0,player_width,player_height)
 
 points = 50
@@ -43,6 +43,7 @@ def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   glVertex2f(1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
 
   glEnd()
+
 def DesenhaPlayer1(x, y, x_step = 0, y_step = 0):
   glColor3f(0,1,0)
   glBegin(GL_QUADS)
@@ -191,9 +192,9 @@ def Desenha():
   gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
   
   DesenhaPlayer1(player1.x, player1.y)
-  DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaObjeto(player_width, player_height, player2.x,player2.y)
-  DesenhaTexto(string = str(player2.score), pos= 1)
+  DesenhaTexto(string = str(player1.score), pos = 1)
+  DesenhaTexto(string = str(player2.score), pos= 0)
   
   DesenhaBola(5, 5, red_ball.x,red_ball.y, red=1)
   DesenhaBola(5, 5, ball.x,ball.y)
@@ -373,21 +374,25 @@ def DesenhaTexto(string, result = None, pos = -1):
     else:
       glRasterPos2f(-7.5,0)
 
-    for char in string:
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
-    
     if result:
         glRasterPos2f(-7.5,-7.5)
         for char in result:
           glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
         
+    else:
+      for char in string:          
+          glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
+          if pos == 0:
+            print(str(player1.score),char, pos)
+            print("")
+    
     glPopMatrix()
 
 def main():
   global windows
   glutInit(sys.argv)
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-  glutInitWindowSize(screensize[0]-100, screensize[1]-100)
+  glutInitWindowSize(int(screensize[0]/4)-100, int(screensize[1]/4)-100)
   glutInitWindowPosition(0,0)
   glutCreateWindow(b"Uber Loveable Frog")
   #glutFullScreen()
