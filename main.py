@@ -392,7 +392,7 @@ def main():
   global windows
   glutInit(sys.argv)
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-  glutInitWindowSize(int(screensize[0]/4)-100, int(screensize[1]/4)-100)
+  glutInitWindowSize(screensize[0]-100, screensize[1]-100)
   glutInitWindowPosition(0,0)
   glutCreateWindow(b"Uber Loveable Frog")
   #glutFullScreen()
