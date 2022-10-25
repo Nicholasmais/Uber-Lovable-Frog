@@ -80,7 +80,7 @@ def Timer(value):
   if t > game_time_limit * 1000:
     if player1.score > player2.score : 
       resultado = "Ganhador: Player 1"
-    elif player1.score > player2.score : 
+    elif player1.score < player2.score : 
       resultado = "Ganhador: Player 2"
     else:
       resultado = "Empate"
@@ -88,7 +88,6 @@ def Timer(value):
     glutSwapBuffers()
     end_game = True
   remaining_time = game_time_limit - t/1000
-  print(remaining_time)
   if not end_game:
     if ball.x < 0:
         if (abs(ball.x) + abs(ball.xstep) >= 1-2*player_width/100) and (ball.y < player1.y + 0.1 and ball.y > player1.y - 0.1 ):
