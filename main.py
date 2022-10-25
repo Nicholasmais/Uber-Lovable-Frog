@@ -46,7 +46,7 @@ def Desenha():
   DesenhaObjeto(player_width, player_height, player1.x, player1.y)
   DesenhaTexto(str(player1.score), 0)
   DesenhaObjeto(player_width, player_height, player2.x,player2.y)
-  #DesenhaTexto(str(player2.score), 1)
+  DesenhaTexto(str(player2.score), 1)
   DesenhaObjeto(5, 5, ball_x,ball_y)
   glutSwapBuffers()
 
@@ -56,30 +56,31 @@ def Inicializa():
 def Timer(value):
   global player1, player2, player_width, player_height,ball_x, ball_y, ball_xstep, ball_ystep, window_height, window_width, window_coordinates
 
+  if ball_x < 0:
+      if (abs(ball_x) + abs(ball_xstep) >= 1-player_width/100) and (ball_y < player1.y + 0.1 and ball_y > player1.y - 0.1 ):
+        ball_xstep *= -1
+        ball_x += .075
+
+  if ball_x > 0:
+      if (abs(ball_x) + ball_xstep >= 1-player_width/100) and (ball_y < player2.y + 0.1 and ball_y > player2.y - 0.1 ):
+        ball_xstep *= -1
+        ball_x -= .075
+  
+  if abs(ball_y*window_coordinates) > window_coordinates-10:
+    ball_ystep *= -1
+
   if abs(ball_x*window_coordinates) > window_coordinates:
+    
     if ball_x > 0:
-      player2.score += 1
-    else:
       player1.score += 1
+    else:
+      player2.score += 1
 
     ball_x, ball_y = 0,0
     ball_speed = 0.035
     ball_xstep = ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -ball_speed*np.cos(np.pi/4)
     y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
     ball_ystep = ball_speed*np.sin(y_direction) if random.randint(0,1) == 1 else -ball_speed*(np.sin(y_direction))
-  
-  if ball_x < 0:
-    if abs(abs(ball_x) + ball_xstep >= 1-2*player_width/100) and (abs(ball_y) < abs(player1.y) + 0.1 and abs(ball_y) > abs(player1.y) - 0.1 ):
-      ball_xstep *= -1
-      ball_x += .05
-  
-  if ball_x > 0:
-    if abs(abs(ball_x) + ball_xstep >= 1-player_width/100) and (abs(ball_y) < abs(player2.y) + 0.1 and abs(ball_y) > abs(player2.y) - 0.1 ):
-      ball_xstep *= -1
-      ball_x -= .05
-  
-  if abs(ball_y*window_coordinates) > window_coordinates-10:
-    ball_ystep *= -1
   
   ball_x += ball_xstep
   ball_y += ball_ystep
@@ -114,10 +115,11 @@ def Responsivo(width, height):
 
 def DesenhaTexto(string, pos):
     glPushMatrix()
-    print(gl)
+    print(GL_CURRENT_RASTER_POSITION)
     if not pos:
-      glRasterPos2f(5,-2)
-  
+      glRasterPos2f(-25,90)
+    else:
+      glRasterPos2f(25,90)
 
     for char in string:
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
