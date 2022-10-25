@@ -5,8 +5,8 @@ from OpenGL.GLUT import *
 import sys
 import random
 import numpy as np
-from player import Player
-from ball import Ball
+from classes.player import Player
+from classes.ball import Ball
 
 import ctypes
 user32 = ctypes.windll.user32
