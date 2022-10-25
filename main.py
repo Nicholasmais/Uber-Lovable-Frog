@@ -11,26 +11,27 @@ player2_x, player2_y = 1, 0
 player_width = 5
 player_height = 10
 
-ball_x, ball_y = 0,0
-
-ball_xstep = 0.1
-ball_ystep = 0.1
-
 windowWidth = random.randint(100,1000)
 windowHeight = random.randint(100,1000)
 
+ball_x, ball_y = 0,0
+
+ball_xstep = windowWidth / 10000
+ball_ystep = windowHeight / 20000
+
+
 window_coordinates = 100
 
-def DesenhaBrasil(width, height, y):
+def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   global player1_x, player1_y, player2_x, player2_y, player_width, player_height, ball_xstep, ball_ystep, window_height, window_width, window_coordinates
 
   glColor3f(.5, .5, .5)
   glBegin(GL_QUADS)
 
-  glVertex2f(-1*width,-1*height + y)
-  glVertex2f(-1*width,1*height + y)
-  glVertex2f(1*width,1*height + y)
-  glVertex2f(1*width,-1*height + y)
+  glVertex2f(-1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
+  glVertex2f(-1*width + x*window_coordinates + x_step,1*height + y*window_coordinates + y_step)
+  glVertex2f(1*width + x*window_coordinates + x_step,1*height + y*window_coordinates + y_step)
+  glVertex2f(1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
 
   glEnd()
 
@@ -43,23 +44,25 @@ def Desenha():
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
-  DesenhaBrasil(10, 10, player1_y)
-  DesenhaBrasil(10, 10, player2_y)
+  DesenhaObjeto(10, 10, player1_x, player1_y)
+  DesenhaObjeto(10, 10, player2_x,player2_y)
+  DesenhaObjeto(5, 5, ball_x,ball_y)
   glutSwapBuffers()
 
 def Inicializa():
   glClearColor(0,0,0,1)
 
 def Timer(value):
-  global player1_x, player1_y, player2_x, player2_y, player_width, player_height, ball_xstep, ball_ystep, window_height, window_width, window_coordinates
-  if abs(player1_x) > window_coordinates-1:
+  global player1_x, player1_y, player2_x, player2_y, player_width, player_height,ball_x, ball_y, ball_xstep, ball_ystep, window_height, window_width, window_coordinates
+
+  if abs(ball_x*window_coordinates) > window_coordinates-1:
     ball_xstep *= -1
 
-  if abs(player1_y) > window_coordinates-1:
+  if abs(ball_y*window_coordinates) > window_coordinates-1:
     ball_ystep *= -1
 
-  player1_x += ball_xstep
-  player1_y += 1.5*ball_ystep
+  ball_x += ball_xstep
+  ball_y += ball_ystep
   glutPostRedisplay()
   glutTimerFunc(33, Timer, 1)
 
