@@ -10,7 +10,7 @@ from ball import Ball
 
 end_game = False
 game_time_limit = 15
-
+remaining_time = game_time_limit
 window_coordinates = 100
 player_width = 5
 player_height = 10
@@ -51,7 +51,7 @@ def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
   glEnd()
 
 def Desenha():
-  global player1, player2, ball, window_height, window_width, window_coordinates
+  global player1, player2, ball, window_height, window_width, window_coordinates, end_game, game_time_limit, remaining_time
   
   glClear(GL_COLOR_BUFFER_BIT)
 
@@ -59,19 +59,23 @@ def Desenha():
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
+  
   DesenhaObjeto(player_width, player_height, player1.x, player1.y)
   DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaObjeto(player_width, player_height, player2.x,player2.y)
   DesenhaTexto(string = str(player2.score), pos= 1)
+  
   DesenhaBola(5, 5, red_ball.x,red_ball.y, red=1)
   DesenhaBola(5, 5, ball.x,ball.y)
+
+  DesenhaTexto(string = f"{remaining_time:.1f}", pos = 2)
   glutSwapBuffers()
 
 def Inicializa():
   glClearColor(0,0,0,1)
 
 def Timer(value):
-  global player1, player2, ball, window_height, window_width, window_coordinates, end_game, game_time_limit
+  global player1, player2, ball, window_height, window_width, window_coordinates, end_game, game_time_limit, remaining_time
   t = glutGet(GLUT_ELAPSED_TIME)
   if t > game_time_limit * 1000:
     if player1.score > player2.score : 
@@ -83,7 +87,8 @@ def Timer(value):
     DesenhaTexto(string = f"Fim de jogo.", result = resultado)
     glutSwapBuffers()
     end_game = True
-
+  remaining_time = game_time_limit - t/1000
+  print(remaining_time)
   if not end_game:
     if ball.x < 0:
         if (abs(ball.x) + abs(ball.xstep) >= 1-2*player_width/100) and (ball.y < player1.y + 0.1 and ball.y > player1.y - 0.1 ):
@@ -184,6 +189,8 @@ def DesenhaTexto(string, result = None, pos = -1):
       glRasterPos2f(-25,90)
     elif pos == 1:
       glRasterPos2f(25,90)
+    elif pos == 2:
+      glRasterPos2f(0,90)
     else:
       glRasterPos2f(-7.5,0)
 
