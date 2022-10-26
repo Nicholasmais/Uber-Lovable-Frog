@@ -23,7 +23,7 @@ window_coordinates = 100
 player_width = 5
 player_height = 10
 
-player1 = Player(-1,0,player_width/10,player_width*3/10)
+player1 = Player(-1,0,player_width/10,player_height/4)
 player2 = Player(1,0,player_width,player_height)
 
 points = 50
@@ -193,8 +193,8 @@ def Desenha():
   
   DesenhaPlayer1(player1.x, player1.y)
   DesenhaObjeto(player_width, player_height, player2.x,player2.y)
-  DesenhaTexto(string = str(player1.score), pos = 1)
-  DesenhaTexto(string = str(player2.score), pos= 0)
+  DesenhaTexto(string = str(player1.score), pos = 0)
+  DesenhaTexto(string = str(player2.score), pos= 1)
   
   DesenhaBola(5, 5, red_ball.x,red_ball.y, red=1)
   DesenhaBola(5, 5, ball.x,ball.y)
@@ -219,13 +219,13 @@ def Timer(value):
   remaining_time = game_time_limit - (t/1000 - hold_time)
   if not pause_game:
     if ball.x < 0:
-        if (abs(ball.x) + abs(ball.xstep) >= 1-2*player_width/100) and (ball.y < player1.y + 0.1 and ball.y > player1.y - 0.1 ):
-          ball.xstep *= -1.25
-          ball.x += .075
+        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height/12.5) and abs(ball.y) > abs(player1.y) - abs(player1.height/12.5) ):
+          ball.xstep *= -1
+          ball.x += .1
 
     if ball.x > 0:
-        if (abs(ball.x) + ball.xstep >= 1-2*player_width/100) and (ball.y < player2.y + 0.1 and ball.y > player2.y - 0.1 ):
-          ball.xstep *= -1.25
+        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (ball.y < player2.y + player2.height/100 and ball.y > player2.y - player2.height/100 ):
+          ball.xstep *= -1
           ball.x -= .075
     
     if abs(ball.y*window_coordinates) > window_coordinates-10:
@@ -238,12 +238,8 @@ def Timer(value):
       else:
         player2.score += 1
 
-      ball.x, ball.y = 0,0
-      ball.speed = 0.035
-      ball.xstep = ball.speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -ball.speed*np.cos(np.pi/4)
-      y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
-      ball.ystep = ball.speed*np.sin(y_direction) if random.randint(0,1) == 1 else -ball.speed*(np.sin(y_direction))
-    
+      ball = Ball(0,0,5,0.035)
+      
     ball.x += ball.xstep
     ball.y += ball.ystep
 
@@ -251,7 +247,7 @@ def Timer(value):
     glutTimerFunc(33, Timer, 1)
 
 def TimerRed(value):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
 
   if not pause_game:
 
@@ -271,15 +267,11 @@ def TimerRed(value):
       red_ball.ystep *= -1
 
     if abs(red_ball.x*window_coordinates) > window_coordinates:
-      red_ball.x, red_ball.y = 0,0
-      red_ball.speed = 0.015
-      red_ball.xstep = red_ball.speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -red_ball.speed*np.cos(np.pi/4)
-      y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
-      red_ball.ystep = red_ball.speed*np.sin(y_direction) if random.randint(0,1) == 1 else -red_ball.speed*(np.sin(y_direction))
-
+      red_ball = Ball(0,0,5,0.035)
+      
     red_ball.x += red_ball.xstep
     red_ball.y += red_ball.ystep
-
+    
     glutPostRedisplay()
     glutTimerFunc(33, TimerRed, 1)
 
@@ -305,7 +297,7 @@ def HandleMenu(op):
       hold_time = 0      
 
       ball.x, ball.y = 0,0
-      ball.speed = 0.035
+      ball.ball_speed = 0.035
       ball.xstep = ball.speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -ball.speed*np.cos(np.pi/4)
       y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
       ball.ystep = ball.speed*np.sin(y_direction) if random.randint(0,1) == 1 else -ball.speed*(np.sin(y_direction))
@@ -381,10 +373,7 @@ def DesenhaTexto(string, result = None, pos = -1):
         
     else:
       for char in string:          
-          glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
-          if pos == 0:
-            print(str(player1.score),char, pos)
-            print("")
+          glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))                                
     
     glPopMatrix()
 
