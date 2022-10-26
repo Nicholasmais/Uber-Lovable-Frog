@@ -158,8 +158,8 @@ def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
     glBegin(GL_POLYGON)
     glVertex2f(1.8*red_ball.radius - 2*red_ball.radius + x*window_coordinates + x_step,3.5*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
     glVertex2f(2.2*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,3.5*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
-    glVertex2f(2.2*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
-    glVertex2f(1.8*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(2.2*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,.5*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
+    glVertex2f(1.8*red_ball.radius- 2*red_ball.radius+ x*window_coordinates + x_step,.5*red_ball.radius- 2*red_ball.radius+y*window_coordinates + y_step)
     glEnd()
 
     glBegin(GL_POLYGON)
@@ -199,8 +199,8 @@ def Desenha():
   DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaTexto(string = str(player2.score), pos= 1)
   
-  DesenhaBola(5, 5, ball.x,ball.y)
   DesenhaBola(5, 5, red_ball.x,red_ball.y, red=1)
+  DesenhaBola(5, 5, ball.x,ball.y)
 
   DesenhaTexto(string = f"{remaining_time:.1f}", pos = 2)
   glutSwapBuffers()
