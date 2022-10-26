@@ -14,7 +14,7 @@ screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 
 pause_game = True
 end_game = False
-game_time_limit = 30
+game_time_limit = 5
 remaining_time = game_time_limit
 hold_time = 0
 reset_time = 0
@@ -25,8 +25,8 @@ window_coordinates = 100
 player_width = 5
 player_height = 10
 
-player1 = Player(-1,0,2*player_width/10,player_height/4)
-player2 = Player(.625,0,2*player_width*4,player_height/4)
+player1 = Player(-1,0,player_width/10,player_height/4)
+player2 = Player(.775,0,player_width*5,player_height/4)
 
 points = 50
 
@@ -148,112 +148,112 @@ def DesenhaPlayer1(x, y, x_step = 0, y_step = 0):
 def DesenhaPlayer2(x, y, x_step=0, y_step=0):
     glColor3f(1,1,1)
     glBegin(GL_QUADS)
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width/5))
     glEnd()
     glColor3f(1,1,1)
     glBegin(GL_QUADS)
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width/5))
     glEnd()
 
     glColor3f(1,1,1)
     glBegin(GL_QUADS)
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width/5))
     glEnd()
 
     glColor3f(0,0,0)
     glBegin(GL_QUADS)
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.60))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.65))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*.75*0.65))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*.75*0.60))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*0.60))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*0.60))
     glEnd()
 
     glColor3f(0,0,0)
     glBegin(GL_LINES)
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.65))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*.75*0.68))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*0.68))
     glEnd()
 
     glColor3f(1,1,0)
     glBegin(GL_TRIANGLES)
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width/2))
     glEnd()
 
     glColor3f(0,0,0)
     glBegin(GL_LINES)
-    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.60))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.60))
     glEnd()
 
     glColor3f(0.8,0.4,0)
     glBegin(GL_POLYGON)
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.59),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.67),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.71),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.79),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.59),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.67),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.71),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.79),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width/5))
     glEnd()
 
     glColor(0,0,0)
     glBegin(GL_LINES)
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.55))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width/2))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.70))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*0.70))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*0.75))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.75))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.80))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*0.80))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*0.75))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*0.75))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*0.70))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*0.70))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width/5))
 
-    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
-    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width/5))
     glEnd()
 
 def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
@@ -298,12 +298,15 @@ def Desenha():
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
   
   glClear(GL_COLOR_BUFFER_BIT)
-
+  
   glViewport(0,0,window_width,window_height)
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
   
+  DesenhaPlayer1(player1.x, player1.y)
+  DesenhaPlayer2(player2.x, player2.y)
+
   DesenhaObjeto(window_coordinates, 10, 0,1)
   DesenhaObjeto(window_coordinates, 10, 0,-1)
 
@@ -315,12 +318,6 @@ def Desenha():
 
   DesenhaTexto(string = f"{remaining_time:.1f}", pos = 2)
   
-  glViewport(0,0,int(window_width/2),window_height)
-  DesenhaPlayer1(player1.x, player1.y)
-
-  glViewport(int(window_width/2),0,int(window_width/2),window_height)
-  DesenhaPlayer2(player2.x, player2.y)
-
   glutSwapBuffers()
 
 def Timer(value):
