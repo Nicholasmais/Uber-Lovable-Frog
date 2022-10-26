@@ -18,13 +18,15 @@ game_time_limit = 30
 remaining_time = game_time_limit
 hold_time = 0
 reset_time = 0
+timer_red = 0
+delta_time_red = 0
 
 window_coordinates = 100
 player_width = 5
 player_height = 10
 
-player1 = Player(-1,0,player_width/10,player_height/4)
-player2 = Player(1,0,player_width,player_height)
+player1 = Player(-1,0,2*player_width/10,player_height/4)
+player2 = Player(.625,0,2*player_width*4,player_height/4)
 
 points = 50
 
@@ -129,19 +131,130 @@ def DesenhaPlayer1(x, y, x_step = 0, y_step = 0):
   glVertex2f(player1.width*15+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
   glEnd()
 
-  glColor3f(0,0,0)
+  glColor3f(1,1,1)
   glBegin(GL_TRIANGLES)
   glVertex2f(player1.width*11+x*window_coordinates + x_step,y+player1.height*1+y*window_coordinates + y_step)
   glVertex2f(player1.width*16+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
   glVertex2f(player1.width*16+x*window_coordinates + x_step,y+player1.height*0+y*window_coordinates + y_step)
   glEnd()
 
-  glColor3f(0,0,0)
+  glColor3f(1,1,1)
   glBegin(GL_TRIANGLES)
   glVertex2f(player1.width*11+x*window_coordinates + x_step,y+player1.height*1+y*window_coordinates + y_step)
   glVertex2f(player1.width*6+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
   glVertex2f(player1.width*6+x*window_coordinates + x_step,y+player1.height*0+y*window_coordinates + y_step)
   glEnd()
+
+def DesenhaPlayer2(x, y, x_step=0, y_step=0):
+    glColor3f(1,1,1)
+    glBegin(GL_QUADS)
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glEnd()
+    glColor3f(1,1,1)
+    glBegin(GL_QUADS)
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75/5))
+    glEnd()
+
+    glColor3f(1,1,1)
+    glBegin(GL_QUADS)
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75/5))
+    glEnd()
+
+    glColor3f(0,0,0)
+    glBegin(GL_QUADS)
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.60))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*.75*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.62),y*window_coordinates + y_step + (player2.width*.75*0.60))
+    glEnd()
+
+    glColor3f(0,0,0)
+    glBegin(GL_LINES)
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.57),y*window_coordinates + y_step + (player2.width*.75*0.65))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*.75*0.68))
+    glEnd()
+
+    glColor3f(1,1,0)
+    glBegin(GL_TRIANGLES)
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+    glEnd()
+
+    glColor3f(0,0,0)
+    glBegin(GL_LINES)
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.60))
+    glEnd()
+
+    glColor3f(0.8,0.4,0)
+    glBegin(GL_POLYGON)
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.59),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.63),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.67),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.71),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.79),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glEnd()
+
+    glColor(0,0,0)
+    glBegin(GL_LINES)
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.55))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width/5),y*window_coordinates + y_step + (player2.width*.75/2))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.70))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.52),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.75))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.55),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.80))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.75))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.75),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.75))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.70))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.78),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75*0.70))
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+
+    glVertex2f(x*window_coordinates + x_step + (player2.width*0.80),y*window_coordinates + y_step + (player2.width*.75/5))
+    glVertex2f(x*window_coordinates + x_step + (player2.width/2),y*window_coordinates + y_step + (player2.width*.75/5))
+    glEnd()
 
 def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, points, radius
@@ -194,8 +307,6 @@ def Desenha():
   DesenhaObjeto(window_coordinates, 10, 0,1)
   DesenhaObjeto(window_coordinates, 10, 0,-1)
 
-  DesenhaPlayer1(player1.x, player1.y)
-  DesenhaObjeto(player_width, player_height, player2.x,player2.y)
   DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaTexto(string = str(player2.score), pos= 1)
   
@@ -203,11 +314,20 @@ def Desenha():
   DesenhaBola(5, 5, ball.x,ball.y)
 
   DesenhaTexto(string = f"{remaining_time:.1f}", pos = 2)
+  
+  glViewport(0,0,int(window_width/2),window_height)
+  DesenhaPlayer1(player1.x, player1.y)
+
+  glViewport(int(window_width/2),0,int(window_width/2),window_height)
+  DesenhaPlayer2(player2.x, player2.y)
+
   glutSwapBuffers()
 
 def Timer(value):
-  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time
+  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, timer_red, delta_time_red
   t = glutGet(GLUT_ELAPSED_TIME) - reset_time
+  delta_time_red = t - timer_red
+
   if  game_time_limit - (t/1000 - hold_time) <= 0:
     if player1.score > player2.score : 
       resultado = "Ganhador: Player 1"
@@ -220,16 +340,20 @@ def Timer(value):
     pause_game = True
     end_game = True
   remaining_time = game_time_limit - (t/1000 - hold_time)
+  
   if not pause_game:
+    if delta_time_red > 500:
+      glClearColor(0,0,0,1)
+
     if ball.x < 0:
-        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height/12.5) and abs(ball.y) > abs(player1.y) - abs(player1.height/12.5) ):
-          ball.xstep *= -1.15
+        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
+          ball.xstep *= -1
           red_ball.xstep *= 1.15
           ball.x += .1
 
     if ball.x > 0:
-        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (ball.y < player2.y + player2.height/100 and ball.y > player2.y - player2.height/100 ):
-          ball.xstep *= -1.15
+        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (abs(ball.y) < abs(player2.y) + player2.height*0.1 and abs(ball.y) > abs(player2.y) - player2.height*0.1 ):
+          ball.xstep *= -1
           red_ball.xstep *= 1.15
           ball.x -= .075
     
@@ -242,13 +366,16 @@ def Timer(value):
         player1.score += 1
       else:
         player2.score += 1
+        glClearColor(1, 0, 0, 1)
+        timer_red = t
 
-      ball = Ball(0,0,5,0.035)
+
+      ball = Ball(0,0,5,0.015)
       red_ball = Ball(0,0,5,0.035)
       
     ball.x += ball.xstep
     ball.y += ball.ystep
-
+    
     glutPostRedisplay()
     glutTimerFunc(33, Timer, 1)
 
@@ -257,15 +384,14 @@ def TimerRed(value):
 
   if not pause_game:
     if red_ball.x < 0:
-        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-2*player_width/100) and (red_ball.y < player1.y + 0.1 and red_ball.y > player1.y - 0.1 ):
+        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (abs(red_ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(red_ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
           red_ball.xstep *= -1
-          red_ball.x += .25
+          red_ball.x += .1
           player1.score -= 1
-
     if red_ball.x > 0:
-        if (abs(red_ball.x) + red_ball.xstep >= 1-2*player_width/100) and (red_ball.y < player2.y + 0.1 and red_ball.y > player2.y - 0.1 ):
-          red_ball.xstep *= -1
-          red_ball.x -= .25
+        if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (abs(red_ball.y) < abs(player2.y) + player2.height*0.1 and abs(red_ball.y) > abs(player2.y) - player2.height*0.1 ):
+          red_ball.xstep *= -1          
+          red_ball.x -= .1
           player2.score -= 1
 
     if abs(red_ball.y*window_coordinates) > window_coordinates-20:
@@ -316,6 +442,7 @@ def HandleMenu(op):
       
       if pause_game:
         end_game = False
+        pause_game = False
         glutTimerFunc(33, Timer, 1)
         glutTimerFunc(33, TimerRed, 1)    
     case -1:
@@ -349,7 +476,7 @@ def Teclado(key, x, y):
         if player2.y + 0.2 < 1 - ( player2.height / window_coordinates ):
           player2.y += .2
       case 103:
-        if player2.y - 0.2 > -1 + ( player2.height / window_coordinates ):
+        if player2.y - 0.2 > -1.2 + ( player2.height / window_coordinates ):
           player2.y -= .2
  
     glutPostRedisplay()     
@@ -361,7 +488,7 @@ def Responsivo(width, height):
 
 def DesenhaTexto(string, result = None, pos = -1):
     glPushMatrix()
-
+    glColor3f(1.0, 1.0, 1.0);
     if pos == 0:
       glRasterPos2f(-25,80)
     elif pos == 1:
@@ -377,7 +504,7 @@ def DesenhaTexto(string, result = None, pos = -1):
           glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
         
     else:
-      for char in string:          
+      for char in string:     
           glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))                                
     
     glPopMatrix()
