@@ -14,7 +14,7 @@ screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 
 pause_game = True
 end_game = False
-game_time_limit = 5
+game_time_limit = 35
 remaining_time = game_time_limit
 hold_time = 0
 reset_time = 0
@@ -344,13 +344,13 @@ def Timer(value):
 
     if ball.x < 0:
         if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
-          ball.xstep *= -1
+          ball.xstep *= -1.25
           red_ball.xstep *= 1.15
           ball.x += .1
 
     if ball.x > 0:
         if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (abs(ball.y) < abs(player2.y) + player2.height*0.1 and abs(ball.y) > abs(player2.y) - player2.height*0.1 ):
-          ball.xstep *= -1
+          ball.xstep *= -1.25
           red_ball.xstep *= 1.15
           ball.x -= .075
     
@@ -368,7 +368,7 @@ def Timer(value):
 
 
       ball = Ball(0,0,5,0.015)
-      red_ball = Ball(0,0,5,0.035)
+      red_ball = Ball(0,0,5,0.025)
       
     ball.x += ball.xstep
     ball.y += ball.ystep
@@ -380,22 +380,20 @@ def TimerRed(value):
   global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
 
   if not pause_game:
-    if red_ball.x < 0:
-        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (abs(red_ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(red_ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
-          red_ball.xstep *= -1
-          red_ball.x += .1
+    if red_ball.x < 0:        
+        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (red_ball.y < player1.y + player1.height*0.1 and red_ball.y > player1.y - player1.height*0.05 ):                    
           player1.score -= 1
-    if red_ball.x > 0:
-        if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (abs(red_ball.y) < abs(player2.y) + player2.height*0.1 and abs(red_ball.y) > abs(player2.y) - player2.height*0.1 ):
-          red_ball.xstep *= -1          
-          red_ball.x -= .1
+          red_ball = Ball(0,0,5,0.025)
+    if red_ball.x > 0:        
+        if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (red_ball.y < player2.y + player2.height*0.1 and red_ball.y > player2.y - player2.height*0.05 ):                    
           player2.score -= 1
-
+          red_ball = Ball(0,0,5,0.025)
+    
     if abs(red_ball.y*window_coordinates) > window_coordinates-20:
       red_ball.ystep *= -1
 
     if abs(red_ball.x*window_coordinates) > window_coordinates:
-      old_red_ball_speed = red_ball.ball_speed * 1.05
+      old_red_ball_speed = red_ball.ball_speed * 1.25
       red_ball = Ball(0,0,5,old_red_ball_speed)
 
     red_ball.x += red_ball.xstep
