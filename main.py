@@ -131,7 +131,7 @@ def Desenha():
   gluOrtho2D(-130,150,-130,150)
 
   if timer_red and delta_time_red < 500:
-    red_ball._draw_splosion_(explosion_x, explosion_y,window_coordinates= window_coordinates)
+    red_ball._draw_explosion_(explosion_x, explosion_y,window_coordinates= window_coordinates)
 
   glViewport(0,0,window_width,window_height)
   glMatrixMode(GL_MODELVIEW)

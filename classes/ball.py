@@ -52,7 +52,7 @@ class Ball():
           glVertex2f(cos, sin)
       glEnd()
 
-  def _draw_splosion_(self,x, y, window_coordinates):
+  def _draw_explosion_(self,x, y, window_coordinates):
     if self.red:
       print(x, y, x*window_coordinates, y*window_coordinates)
       glColor3f(1,0,0)
