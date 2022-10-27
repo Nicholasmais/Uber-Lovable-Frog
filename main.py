@@ -110,7 +110,7 @@ def Background(x1 = -100, y1=0):
 def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
 
-  glColor3f(.5, .5, .5)
+  glColor3f(.7, .7, .7)
   glBegin(GL_QUADS)
 
   glVertex2f(-1*width + x*window_coordinates + x_step,-1*height + y*window_coordinates + y_step)
@@ -402,7 +402,7 @@ def Desenha():
   glutSwapBuffers()
 
 def Timer(value):
-  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, timer_red, delta_time_red
+  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, t, timer_red, delta_time_red
   t = glutGet(GLUT_ELAPSED_TIME) - reset_time
   delta_time_red = t - timer_red
 
@@ -424,13 +424,13 @@ def Timer(value):
       glClearColor(0.3, 0.8, 1, 1)
 
     if ball.x < 0:
-        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
+        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (ball.y < player1.y + player1.height*0.1 and ball.y > player1.y - player1.height*0.05 ):
           ball.xstep *= -1.25
           red_ball.xstep *= 1.15
           ball.x += .1
 
     if ball.x > 0:
-        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (abs(ball.y) < abs(player2.y) + player2.height*0.1 and abs(ball.y) > abs(player2.y) - player2.height*0.1 ):
+        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (ball.y < player2.y + player2.height*0.1 and ball.y > player2.y - player2.height*0.05 ):
           ball.xstep *= -1.25
           red_ball.xstep *= 1.15
           ball.x -= .075
@@ -444,11 +444,8 @@ def Timer(value):
         player1.score += 1
       else:
         player2.score += 1
-        glClearColor(1, 0, 0, 1)
-        timer_red = t
 
-
-      ball = Ball(0,0,5,0.015)
+      ball = Ball(0,0,5,0.035)
       red_ball = Ball(0,0,5,0.025)
       
     ball.x += ball.xstep
@@ -458,18 +455,21 @@ def Timer(value):
     glutTimerFunc(33, Timer, 1)
 
 def TimerRed(value):
-  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, timer_red
 
   if not pause_game:
     if red_ball.x < 0:        
-        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (red_ball.y < player1.y + player1.height*0.1 and red_ball.y > player1.y - player1.height*0.05 ):                    
+        if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (red_ball.y < player1.y + player1.height*0.1 and red_ball.y > player1.y - player1.height*0.05 ):
           player1.score -= 1
           red_ball = Ball(0,0,5,0.025)
+          glClearColor(1, 0, 0, 1)
+          timer_red = t
     if red_ball.x > 0:        
-        if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (red_ball.y < player2.y + player2.height*0.1 and red_ball.y > player2.y - player2.height*0.05 ):                    
+        if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (red_ball.y < player2.y + player2.height*0.1 and red_ball.y > player2.y - player2.height*0.05 ):
           player2.score -= 1
           red_ball = Ball(0,0,5,0.025)
-    
+          glClearColor(1, 0, 0, 1)
+          timer_red = t
     if abs(red_ball.y*window_coordinates) > window_coordinates-20:
       red_ball.ystep *= -1
 
