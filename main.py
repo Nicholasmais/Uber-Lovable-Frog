@@ -37,21 +37,21 @@ radius = 25
 radius2 = 23
 radius3 = 2
 
-def Background(x1 = -100, y1=0):
+def Background(x1 = -window_coordinates, y1=0):
     glColor3f(1,0.5,0.5)
     glBegin(GL_QUADS)
     glVertex2f(x1+(0),y1+(0))
     glVertex2f(x1+(0),y1+(600))
-    glVertex2f(x1+(3),y1+(600))
-    glVertex2f(x1+(3),y1+(0))
+    glVertex2f(x1+(window_coordinates + 1.5),y1+(600))
+    glVertex2f(x1+(window_coordinates + 1.5),y1+(0))
     glEnd()
     
     glColor3f(1,0.5,0.5)
     glBegin(GL_QUADS)
-    glVertex2f(x1+(497),y1+(0))
-    glVertex2f(x1+(497),y1+(600))
-    glVertex2f(x1+(500),y1+(600))
-    glVertex2f(x1+(500),y1+(0))
+    glVertex2f(x1+(496-window_coordinates),y1+(0))
+    glVertex2f(x1+(496-window_coordinates),y1+(600))
+    glVertex2f(x1+(500-window_coordinates),y1+(600))
+    glVertex2f(x1+(500-window_coordinates),y1+(0))
     glEnd()
 
     glColor3f(0,0,0)
@@ -570,12 +570,12 @@ def DesenhaTexto(string, result = None, pos = -1):
     elif pos == 1:
       glRasterPos2f(25,80)
     elif pos == 2:
-      glRasterPos2f(0,80)
+      glRasterPos2f(-3.25,80)
     else:
       glRasterPos2f(-7.5,0)
 
     if result:
-        glRasterPos2f(-7.5,-7.5)
+        glRasterPos2f(-15,0)
         for char in result:
           glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
         
