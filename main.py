@@ -33,6 +33,80 @@ points = 50
 ball = Ball(0,0,5,0.035)
 red_ball = Ball(0,0,5,0.025)
 
+radius = 25
+radius2 = 23
+radius3 = 2
+
+def Background(x1 = -100, y1=0):
+    glColor3f(1,0.5,0.5)
+    glBegin(GL_QUADS)
+    glVertex2f(x1+(0),y1+(0))
+    glVertex2f(x1+(0),y1+(600))
+    glVertex2f(x1+(3),y1+(600))
+    glVertex2f(x1+(3),y1+(0))
+    glEnd()
+    
+    glColor3f(1,0.5,0.5)
+    glBegin(GL_QUADS)
+    glVertex2f(x1+(497),y1+(0))
+    glVertex2f(x1+(497),y1+(600))
+    glVertex2f(x1+(500),y1+(600))
+    glVertex2f(x1+(500),y1+(0))
+    glEnd()
+
+    glColor3f(0,0,0)
+    glBegin(GL_QUADS)
+    glVertex2f(x1+(0),y1+(0))
+    glVertex2f(x1+(500),y1+(0))
+    glVertex2f(x1+(500),y1+(5))
+    glVertex2f(x1+(0),y1+(5))
+    glEnd()
+
+    glColor(0,0,0)
+    glBegin(GL_QUADS)
+    glVertex2f(x1+(0),y1+(245))
+    glVertex2f(x1+(500),y1+(245))
+    glVertex2f(x1+(500),y1+(600))
+    glVertex2f(x1+(0),y1+(600))
+    glEnd()
+
+    glColor(1,1,1)
+    glBegin(GL_QUADS)
+    glVertex2f(x1+(248),y1+(5))
+    glVertex2f(x1+(251),y1+(5))
+    glVertex2f(x1+(251),y1+(245))
+    glVertex2f(x1+(248),y1+(245))
+    glEnd()
+
+    
+
+    import math
+    
+
+    glBegin(GL_POLYGON)
+    glColor3f(1,1,1)
+    for i in range(points):
+        cos = radius * math.cos(i * 2 * math.pi / points) + x1+(250)
+        sin = radius * math.sin(i * 2 * math.pi / points) + y1+(125)
+        glVertex2f(cos, sin)
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    glColor3f(0.3,0.8,1)
+    for i in range(points):
+        cos = radius2 * math.cos(i * 2 * math.pi / points) + x1+(250)
+        sin = radius2 * math.sin(i * 2 * math.pi / points) + y1+(125)
+        glVertex2f(cos, sin)
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    glColor3f(1,1,1)
+    for i in range(points):
+        cos = radius3 * math.cos(i * 2 * math.pi / points) + x1+(250)
+        sin = radius3 * math.sin(i * 2 * math.pi / points) + y1+(125)
+        glVertex2f(cos, sin)
+    glEnd()
+
 def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
 
@@ -131,14 +205,14 @@ def DesenhaPlayer1(x, y, x_step = 0, y_step = 0):
   glVertex2f(player1.width*15+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
   glEnd()
 
-  glColor3f(1,1,1)
+  glColor3f(0,0,0)
   glBegin(GL_TRIANGLES)
   glVertex2f(player1.width*11+x*window_coordinates + x_step,y+player1.height*1+y*window_coordinates + y_step)
   glVertex2f(player1.width*16+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
   glVertex2f(player1.width*16+x*window_coordinates + x_step,y+player1.height*0+y*window_coordinates + y_step)
   glEnd()
 
-  glColor3f(1,1,1)
+  glColor3f(0,0,0)
   glBegin(GL_TRIANGLES)
   glVertex2f(player1.width*11+x*window_coordinates + x_step,y+player1.height*1+y*window_coordinates + y_step)
   glVertex2f(player1.width*6+x*window_coordinates + x_step,y+player1.height*2+y*window_coordinates + y_step)
@@ -293,7 +367,7 @@ def DesenhaBola(width, height, x, y, x_step = 0, y_step = 0, red=0):
         sin = 1.5*ball.radius * np.sin(i * 2 * np.pi / points) + y*window_coordinates + y_step
         glVertex2f(cos, sin)
     glEnd()
-   
+
 def Desenha():
   global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
   
@@ -302,13 +376,20 @@ def Desenha():
   glViewport(0,0,window_width,window_height)
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
-  gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
+  gluOrtho2D(0,300,0,250)
   
-  DesenhaPlayer1(player1.x, player1.y)
-  DesenhaPlayer2(player2.x, player2.y)
+  Background()
+
+  glViewport(0,0,window_width,window_height)
+  glMatrixMode(GL_MODELVIEW)
+  glLoadIdentity()
+  gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
 
   DesenhaObjeto(window_coordinates, 10, 0,1)
   DesenhaObjeto(window_coordinates, 10, 0,-1)
+
+  DesenhaPlayer1(player1.x, player1.y)
+  DesenhaPlayer2(player2.x, player2.y)
 
   DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaTexto(string = str(player2.score), pos= 1)
@@ -340,7 +421,7 @@ def Timer(value):
   
   if not pause_game:
     if delta_time_red > 500:
-      glClearColor(0,0,0,1)
+      glClearColor(0.3, 0.8, 1, 1)
 
     if ball.x < 0:
         if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (abs(ball.y) < abs(player1.y) + abs(player1.height*0.1) and abs(ball.y) > abs(player1.y) - abs(player1.height*0.05) ):
@@ -483,7 +564,7 @@ def Responsivo(width, height):
 
 def DesenhaTexto(string, result = None, pos = -1):
     glPushMatrix()
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.0, 0.0, 0.0);
     if pos == 0:
       glRasterPos2f(-25,80)
     elif pos == 1:
@@ -520,7 +601,7 @@ def main():
   glutTimerFunc(33, Timer if not pause_game else lambda:None, 1)
   glutTimerFunc(33, TimerRed if not pause_game else lambda:None, 1)
   CriaMenu()
-  glClearColor(0,0,0,1)
+  glClearColor(0.3, 0.8, 1, 1)
   glutMainLoop()
 
 main()
