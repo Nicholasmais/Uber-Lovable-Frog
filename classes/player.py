@@ -3,11 +3,16 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 class Player():
-  def __init__(self, x, y, w, h, name):
-    self.x = x
+  def __init__(self, x, y, s, name):
+    if name =="protagonista":      
+      self.width = 1*s
+      self.height = 2*s
+      self.x = x + self.width/2
+    if name =="inimigo":
+      self.width = 1.5*s
+      self.height = 3*s
+      self.x = x - self.width/2
     self.y = y
-    self.width = w
-    self.height = h
     self.score = 0
     self.type = name
 
@@ -155,11 +160,7 @@ class Player():
       glVertex2f((self.x + -5*self.width/6 + 5*self.width/3*0.5),self.y -5*self.height/6 + 5*self.height/3*0.55)
       glVertex2f((self.x + -5*self.width/6 + 5*self.width/3*0.5),self.y -5*self.height/6 + 5*self.height/3*0.70)
       glVertex2f((self.x + -5*self.width/6 + 5*self.width/3*0.2),self.y -5*self.height/6 + 5*self.height/3*0.5)
-
-      print((self.x + -5*self.width/6 + 5*self.width/3*0.5),self.y -5*self.height/6 + 5*self.height/3*0.55)
-      print((self.x + -5*self.width/6 + 5*self.width/3*0.5),self.y -5*self.height/6 + 5*self.height/3*0.70)
-      print((self.x + -5*self.width/6 + 5*self.width/3*0.2),self.y -5*self.height/6 + 5*self.height/3*0.5)
-
+  
       glEnd()
       glColor3f(0,0,0)
       glBegin(GL_LINES)
