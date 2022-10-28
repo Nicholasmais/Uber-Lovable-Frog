@@ -49,7 +49,7 @@ class Main():
     self.main()
 
   def Background(self):
-      x1 = self.window_coordinates
+      x1 = -self.window_coordinates
       y1 = 0
       glColor3f(1,0.5,0.5)
       glBegin(GL_QUADS)
@@ -115,8 +115,12 @@ class Main():
           glVertex2f(cos, sin)
       glEnd()
 
-  def DesenhaObjeto(self,width, height, x, y, x_step = 0, y_step = 0):
-    glColor3f(.7, .7, .7)
+  def DesenhaObjeto(self,width, height, x, y,color):
+    
+    x_step = 0
+    y_step = 0
+    
+    glColor3f(color[0],color[1],color[2])
     glBegin(GL_QUADS)
 
     glVertex2f(-1*width + x*self.window_coordinates + x_step,-1*height + y*self.window_coordinates + y_step)
@@ -148,18 +152,21 @@ class Main():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluOrtho2D(-self.window_coordinates,self.window_coordinates,-self.window_coordinates,self.window_coordinates)
-
-    self.DesenhaObjeto(self.window_coordinates, self.player_size, 0,1)
-    self.DesenhaObjeto(self.window_coordinates, self.player_size, 0,-1)
-
+    
+    self.DesenhaObjeto(self.window_coordinates, self.player_size, 0,1,(.7,.7,.7))
+    self.DesenhaObjeto(self.window_coordinates, self.player_size, 0,-1,(.7,.7,.7))
+    self.DesenhaObjeto(10,10,-.25,1,(0,0,0))
+    self.DesenhaObjeto(10,10,0,1,(.8,0,0))
+    self.DesenhaObjeto(10,10,.25,1,(0,0,0))
+          
     self.player1._draw_player_()
     self.player2._draw_player_()
 
     self.DesenhaTexto(string = str(self.player1.score), pos = 0)
     self.DesenhaTexto(string = str(self.player2.score), pos= 1)
     
-    self.ball._draw_ball_()
-    self.red_ball._draw_ball_()
+    self.ball._draw_ball_(window_coordinates=self.window_coordinates)
+    self.red_ball._draw_ball_(window_coordinates=self.window_coordinates)
 
     self.DesenhaTexto(string = f"{self.remaining_time:.1f}", pos = 2)
     
@@ -316,17 +323,18 @@ class Main():
 
   def DesenhaTexto(self,string, result = None, pos = -1):
       glPushMatrix()
-      glColor3f(0.0, 0.0, 0.0);
+      glColor3f(1.0, 1.0, 1.0)
       if pos == 0:
-        glRasterPos2f(-25,80)
+        glRasterPos2f(-25,92.5)
       elif pos == 1:
-        glRasterPos2f(25,80)
+        glRasterPos2f(25,92.5)
       elif pos == 2:
-        glRasterPos2f(-3.25,80)
+        glRasterPos2f(-3.25,92.5)
       else:
         glRasterPos2f(-7.5,0)
 
       if result:
+          glColor3f(0.0, 0.0, 0.0)
           glRasterPos2f(-15,0)
           for char in result:
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,ord(char))
