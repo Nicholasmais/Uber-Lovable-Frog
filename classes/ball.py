@@ -54,7 +54,6 @@ class Ball():
 
   def _draw_explosion_(self,x, y, window_coordinates):
     if self.red:
-      print(x, y, x*window_coordinates, y*window_coordinates)
       glColor3f(1,0,0)
       glBegin(GL_POLYGON)
       glVertex2f(x*window_coordinates+(-30),y*window_coordinates+(-30))

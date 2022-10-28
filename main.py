@@ -11,6 +11,8 @@ from classes.ball import Ball
 import ctypes
 user32 = ctypes.windll.user32
 screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+screensize = list(screensize)
+screensize[1] -= 80
 
 pause_game = True
 end_game = False
@@ -22,14 +24,20 @@ timer_red = 0
 delta_time_red = 0
 
 window_coordinates = 100
-player_width = 5
-player_height = 10
+player_size = 10
+player_width = 1*player_size
+player_height = 2*player_size
 
-player1 = Player(-1,0,player_width/10,player_height/4, "protagonista")
-player2 = Player(.775,0,player_width*5,player_height/4, "inimigo")
+player1 = Player(-window_coordinates + player_width/2,0,player_width,player_height, "protagonista")
+player2 = Player(window_coordinates - player_width/2*1.5,0,1.5*player_width,player_height, "inimigo")
 
-ball = Ball(0,0,5,0.035)
-red_ball = Ball(0,0,5,0.025, 1)
+initial_speed = 0.02
+
+ball = Ball(0,0,player_height / 3,initial_speed)
+red_ball = Ball(0,0,player_height / 3,0.025, 1)
+
+ball_colision = 0
+red_ball_colision = 0
 
 radius = 25
 radius2 = 23
@@ -101,7 +109,7 @@ def Background(x1 = -window_coordinates, y1=0):
     glEnd()
 
 def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, screensize,  window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
 
   glColor3f(.7, .7, .7)
   glBegin(GL_QUADS)
@@ -114,18 +122,18 @@ def DesenhaObjeto(width, height, x, y, x_step = 0, y_step = 0):
   glEnd()
 
 def Desenha():
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, explosion_x, explosion_y
+  global player1, player2, ball, screensize,  window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, explosion_x, explosion_y
   
   glClear(GL_COLOR_BUFFER_BIT)
   
-  glViewport(0,0,window_width,window_height)
+  glViewport(0,0,screensize[0], screensize[1])
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(0,300,0,250)
   
   Background()
 
-  glViewport(0,0,window_width,window_height)
+  glViewport(0,0,screensize[0], screensize[1])
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(-130,150,-130,150)
@@ -133,16 +141,26 @@ def Desenha():
   if timer_red and delta_time_red < 500:
     red_ball._draw_explosion_(explosion_x, explosion_y,window_coordinates= window_coordinates)
 
-  glViewport(0,0,window_width,window_height)
+  glViewport(0,0,screensize[0], screensize[1])
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
   gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
 
-  DesenhaObjeto(window_coordinates, 10, 0,1)
-  DesenhaObjeto(window_coordinates, 10, 0,-1)
+  DesenhaObjeto(window_coordinates, player_size, 0,1)
+  DesenhaObjeto(window_coordinates, player_size, 0,-1)
 
-  player1._draw_player_(window_coordinates=window_coordinates)
-  player2._draw_player_(window_coordinates=window_coordinates)
+  glViewport(0,0,screensize[0], screensize[1])
+  glMatrixMode(GL_MODELVIEW)
+  glLoadIdentity()
+  gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
+
+  player1._draw_player_()
+  player2._draw_player_()
+
+  glViewport(0,0,screensize[0], screensize[1])
+  glMatrixMode(GL_MODELVIEW)
+  glLoadIdentity()
+  gluOrtho2D(-window_coordinates,window_coordinates,-window_coordinates,window_coordinates)
 
   DesenhaTexto(string = str(player1.score), pos = 0)
   DesenhaTexto(string = str(player2.score), pos= 1)
@@ -155,7 +173,7 @@ def Desenha():
   glutSwapBuffers()
 
 def Timer(value):
-  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, t, timer_red, delta_time_red
+  global player1, player2, ball, red_ball, screensize,  window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, t, timer_red, delta_time_red, ball_colision, red_ball_colision
   t = glutGet(GLUT_ELAPSED_TIME) - reset_time
   delta_time_red = t - timer_red
 
@@ -174,16 +192,18 @@ def Timer(value):
   
   if not pause_game:
     if ball.x < 0:
-        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (ball.y < player1.y + player1.height*0.1 and ball.y > player1.y - player1.height*0.05 ):
-          ball.xstep *= -1.25
+        if (abs(ball.x) + abs(ball.xstep) >= 1-player_width/100) and (ball.y - ball.radius/10 < player1.y + player1.height/10 and ball.y  + ball.radius /10 > player1.y - player1.height/10 ):
+          ball.xstep = ball_colision/10*abs(ball.xstep) + initial_speed
+          ball_colision += 1          
           red_ball.xstep *= 1.15
           ball.x += .1
 
     if ball.x > 0:
-        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (ball.y < player2.y + player2.height*0.1 and ball.y > player2.y - player2.height*0.05 ):
-          ball.xstep *= -1.25
+        if (abs(ball.x) + ball.xstep >= 1-player_width/100) and (ball.y < player2.y + player2.height*0.1 and ball.y > player2.y - player2.height ):
+          ball.xstep = -(ball_colision/10*abs(ball.xstep) + initial_speed)
+          ball_colision += 1        
           red_ball.xstep *= 1.15
-          ball.x -= .075
+          ball.x -= .1
     
     if abs(ball.y*window_coordinates) > window_coordinates-20:
       ball.ystep *= -1
@@ -195,9 +215,11 @@ def Timer(value):
       else:
         player2.score += 1
 
-      ball = Ball(0,0,5,0.035)
-      red_ball = Ball(0,0,5,0.025, 1)
-      
+      ball = Ball(0,0,player_height / 3,initial_speed)
+
+      red_ball = Ball(0,0,3.5,0.025, 1)
+      red_ball_colision = 0
+      ball_colision = 0
     ball.x += ball.xstep
     ball.y += ball.ystep
     
@@ -205,26 +227,26 @@ def Timer(value):
     glutTimerFunc(33, Timer, 1)
 
 def TimerRed(value):
-  global player1, player2, ball, red_ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, timer_red, explosion_x, explosion_y
+  global player1, player2, ball, red_ball, screensize,  window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t, timer_red, explosion_x, explosion_y, initial_speed
 
   if not pause_game:
     if red_ball.x < 0:        
         if (abs(red_ball.x) + abs(red_ball.xstep) >= 1-player_width/100) and (red_ball.y < player1.y + player1.height*0.1 and red_ball.y > player1.y - player1.height*0.05 ):
           player1.score -= 1        
           explosion_x, explosion_y = red_ball.x, red_ball.y
-          red_ball = Ball(0,0,5,0.025, 1)
+          red_ball = Ball(0,0,3.5,0.025, 1)
           timer_red = t
     if red_ball.x > 0:        
         if (abs(red_ball.x) + red_ball.xstep >= 1-player_width/100) and (red_ball.y < player2.y + player2.height*0.1 and red_ball.y > player2.y - player2.height*0.05 ):
           player2.score -= 1
           explosion_x, explosion_y = red_ball.x+.15, red_ball.y
-          red_ball = Ball(0,0,5,0.025, 1)
+          red_ball = Ball(0,0,3.5,0.025, 1)
           timer_red = t
     if abs(red_ball.y*window_coordinates) > window_coordinates-20:
       red_ball.ystep *= -1
     if abs(red_ball.x*window_coordinates) > window_coordinates:
-      old_red_ball_speed = red_ball.ball_speed * 1.25
-      red_ball = Ball(0,0,5,old_red_ball_speed, 1)
+      old_red_ball_speed =  red_ball_colision/10*abs(ball.xstep) + initial_speed
+      red_ball = Ball(0,0,3.5,old_red_ball_speed, 1)
 
     red_ball.x += red_ball.xstep
     red_ball.y += red_ball.ystep
@@ -233,7 +255,7 @@ def TimerRed(value):
     glutTimerFunc(33, TimerRed, 1)
 
 def HandleMenu(op):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time
+  global player1, player2, ball, screensize,  window_coordinates, pause_game, end_game, game_time_limit, remaining_time, hold_time, reset_time, initial_speed
   match op:
     case 0:
       if not pause_game:
@@ -254,13 +276,13 @@ def HandleMenu(op):
       hold_time = 0      
 
       ball.x, ball.y = 0,0
-      ball.ball_speed = 0.035
+      ball.ball_speed = initial_speed
       ball.xstep = ball.ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -ball.ball_speed*np.cos(np.pi/4)
       y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
       ball.ystep = ball.ball_speed*np.sin(y_direction) if random.randint(0,1) == 1 else -ball.ball_speed*(np.sin(y_direction))
     
       red_ball.x, red_ball.y = 0,0
-      red_ball.ball_speed = 0.035
+      red_ball.ball_speed = initial_speed
       red_ball.xstep = red_ball.ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -red_ball.ball_speed*np.cos(np.pi/4)
       y_direction = random.choice([np.pi/(i/10) for i in range(25,60)])
       red_ball.ystep = red_ball.ball_speed*np.sin(y_direction) if random.randint(0,1) == 1 else -red_ball.ball_speed*(np.sin(y_direction))
@@ -276,7 +298,7 @@ def HandleMenu(op):
   return 0
 
 def CriaMenu():
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, screensize,  window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
   glutCreateMenu(HandleMenu)
   glutAddMenuEntry("Pausar", 0)
   glutAddMenuEntry("Voltar", 1)
@@ -285,31 +307,26 @@ def CriaMenu():
   glutAttachMenu(GLUT_RIGHT_BUTTON)
 
 def Teclado(key, x, y):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
+  global player1, player2, ball, screensize,  window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
   if key == b'\x08':
     glutLeaveMainLoop()
 
   if not pause_game:
     match key:
       case b"w":
-        if player1.y + 0.2 < 1 - ( player1.height / window_coordinates ):
-          player1.y += .2
+        if player1.y + 2*player1.height <= 100:
+          player1.y += player1.height
       case b"s":
-        if player1.y - 0.2 >  -1.2 + ( player1.height / window_coordinates ):
-          player1.y -= .2
+        if player1.y - 2*player1.height >= -100:
+          player1.y -= player1.height
       case 101:
-        if player2.y + 0.2 < 1 - ( player2.height / window_coordinates ):
-          player2.y += .2
+        if player2.y + 20 < 100- ( player2.height ):
+          player2.y += 20
       case 103:
-        if player2.y - 0.2 > -1.2 + ( player2.height / window_coordinates ):
-          player2.y -= .2
+        if player2.y - 20 > -120 + ( player2.height ):
+          player2.y -= 20
  
     glutPostRedisplay()     
-
-def Responsivo(width, height):
-  global player1, player2, ball, window_height, window_width, window_coordinates, pause_game, game_time_limit, remaining_time, hold_time, t
-  window_width = width
-  window_height = height
 
 def DesenhaTexto(string, result = None, pos = -1):
     glPushMatrix()
@@ -338,12 +355,11 @@ def main():
   global pause_game
   glutInit(sys.argv)
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-  glutInitWindowSize(screensize[0], screensize[1]-80)
+  glutInitWindowSize(screensize[0], screensize[1])
   glutInitWindowPosition(0,0)
   glutCreateWindow(b"Uber Loveable Frog")
   #glutFullScreen()
   glutDisplayFunc(Desenha)
-  glutReshapeFunc(Responsivo)
   glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF)
   glutKeyboardFunc(Teclado)
   glutSpecialFunc(Teclado)
