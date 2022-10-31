@@ -11,11 +11,13 @@ from classes.ball import Ball
 import ctypes
 
 class Main():
-  def __init__(self, game_time_limit, window_coordinates, initial_speed, radius):
+  def __init__(self, game_time_limit, player_size, initial_speed, radius):
     user32 = ctypes.windll.user32
     self.screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     self.screensize = list(self.screensize)
     self.screensize[1] -= 80
+
+    self.window_coordinates = 100
 
     self.pause_game = True
     self.end_game = False
@@ -26,14 +28,12 @@ class Main():
     self.timer_red = 0
     self.delta_time_red = 0
 
-    self.window_coordinates = window_coordinates
-
-    self.player_size = self.window_coordinates / 10
+    self.player_size = player_size
 
     self.player1 = Player(-self.window_coordinates,0,self.player_size, "protagonista")
     self.player2 = Player(self.window_coordinates,0,self.player_size, "inimigo")
 
-    self.initial_speed = initial_speed / 100
+    self.initial_speed = initial_speed 
 
     self.ball_radius = radius
     self.ball = Ball(0,0,self.ball_radius, self.initial_speed)
@@ -165,8 +165,8 @@ class Main():
     self.DesenhaTexto(string = str(self.player1.score), pos = 0)
     self.DesenhaTexto(string = str(self.player2.score), pos= 1)
     
-    self.ball._draw_ball_(window_coordinates=self.window_coordinates)
-    self.red_ball._draw_ball_(window_coordinates=self.window_coordinates)
+    self.ball._draw_ball_()
+    self.red_ball._draw_ball_()
 
     self.DesenhaTexto(string = f"{self.remaining_time:.1f}", pos = 2)
     
@@ -191,24 +191,37 @@ class Main():
     
     if not self.pause_game:
       if self.ball.x < 0:
-        if (abs(self.ball.x) + abs(self.ball.xstep) >= self.window_coordinates-self.player1.width) and (self.ball.y - self.ball.radius < self.player1.y + self.player1.height and self.ball.y  + self.ball.radius > self.player1.y - self.player1.height):
+        condicao_x = abs(self.ball.x) + abs(self.ball.xstep) >= self.window_coordinates-self.player1.width
+        if self.ball.y > 0:
+          is_y_above_bottom = (self.ball.y) + self.ball.radius >= (self.player1.y) - self.player1.height/2
+          is_y_below_top = (self.ball.y)  - self.ball.radius <= (self.player1.y) + self.player1.height/2
+        else:
+          is_y_above_bottom = -self.ball.y - self.ball.radius <= -self.player1.y + self.player1.height/2
+          is_y_below_top = -self.ball.y  + self.ball.radius >= -self.player1.y - self.player1.height/2
+        condicao_y = is_y_above_bottom and is_y_below_top
+
+        if condicao_x and condicao_y:
             self.ball.xstep = self.ball_colision/10*abs(self.initial_speed) + self.initial_speed
             self.ball_colision += 1          
             self.red_ball.xstep *= 1.15
             self.ball.x += 1
 
       if self.ball.x > 0:
-          if (abs(self.ball.x) + self.ball.xstep >= self.window_coordinates-self.player2.width) and (self.ball.y < self.player2.y + self.player2.height and self.ball.y > self.player2.y - self.player2.height ):
+        condicao_x = abs(self.ball.x) + abs(self.ball.xstep) >= self.window_coordinates-self.player2.width/2
+        is_y_above_bottom = abs(self.ball.y) + self.ball.radius >= abs(self.player2.y) - self.player2.height/2
+        is_y_below_top = abs(self.ball.y)  - self.ball.radius <= abs(self.player2.y) + self.player2.height/2
+        condicao_y = is_y_above_bottom and is_y_below_top
+
+        if condicao_x and condicao_y:
             self.ball.xstep = -(self.ball_colision/10*abs(self.ball.xstep) + self.initial_speed)
             self.ball_colision += 1        
             self.red_ball.xstep *= 1.15
             self.ball.x -= 1
       
-      if abs(self.ball.y*self.window_coordinates) > self.window_coordinates-20:
+      if abs(self.ball.y) > self.window_coordinates-20:
         self.ball.ystep *= -1
 
-      if abs(self.ball.x*self.window_coordinates) > self.window_coordinates:
-        
+      if abs(self.ball.x) > self.window_coordinates:
         if self.ball.x > 0:
           self.player1.score += 1
         else:
@@ -228,20 +241,38 @@ class Main():
   def TimerRed(self,value):
     if not self.pause_game:
       if self.red_ball.x < 0:        
-          if (abs(self.red_ball.x) + abs(self.red_ball.xstep) >= self.window_coordinates-self.player_size) and (self.red_ball.y < self.player1.y + self.player1.height*0.1 and self.red_ball.y > self.player1.y - self.player1.height*0.05 ):
+        condicao_x = abs(self.red_ball.x) + abs(self.red_ball.xstep) >= self.window_coordinates-self.player1.width
+        if self.red_ball.y > 0:
+          is_y_above_bottom = (self.red_ball.y) + self.red_ball.radius >= (self.player2.y) - self.player2.height/2
+          is_y_below_top = (self.red_ball.y)  - self.red_ball.radius <= (self.player2.y) + self.player2.height/2
+        else:
+          is_y_above_bottom = -self.red_ball.y - self.red_ball.radius <= -self.player2.y + self.player2.height/2
+          is_y_below_top = -self.red_ball.y  + self.red_ball.radius >= -self.player2.y - self.player2.height/2
+        condicao_y = is_y_above_bottom and is_y_below_top
+
+        if condicao_x and condicao_y:
             self.player1.score -= 1        
-            self.explosion_x, self.explosion_y = self.red_ball.x, self.red_ball.y
-            self.red_ball = Ball(0,0,self.ball_radius, self.initial_speed, 1)
-            timer_red = self.t
-      if self.red_ball.x > 0:        
-          if (abs(self.red_ball.x) + self.red_ball.xstep >= self.window_coordinates-self.player_size) and (self.red_ball.y < self.player2.y + self.player2.height*0.1 and self.red_ball.y > self.player2.y - self.player2.height*0.05 ):
-            self.player2.score -= 1
-            self.explosion_x, self.explosion_y = self.red_ball.x+.15, self.red_ball.y
+            self.explosion_x, self.explosion_y = self.player1.x, self.player1.y
             self.red_ball = Ball(0,0,self.ball_radius, self.initial_speed, 1)
             self.timer_red = self.t
-      if abs(self.red_ball.y*self.window_coordinates) > self.window_coordinates-20:
+      if self.red_ball.x > 0:        
+        condicao_x = abs(self.red_ball.x) + abs(self.red_ball.xstep) >= self.window_coordinates-self.player2.width
+        if self.red_ball.y > 0:
+          is_y_above_bottom = (self.red_ball.y) + self.red_ball.radius >= (self.player2.y) - self.player2.height/2
+          is_y_below_top = (self.red_ball.y)  - self.red_ball.radius <= (self.player2.y) + self.player2.height/2
+        else:
+          is_y_above_bottom = -self.red_ball.y - self.red_ball.radius <= -self.player2.y + self.player2.height/2
+          is_y_below_top = -self.red_ball.y  + self.red_ball.radius >= -self.player2.y - self.player2.height/2
+        condicao_y = is_y_above_bottom and is_y_below_top
+
+        if condicao_x and condicao_y:
+            self.player2.score -= 1
+            self.explosion_x, self.explosion_y = self.player2.x, self.player2.y
+            self.red_ball = Ball(0,0,self.ball_radius, self.initial_speed, 1)
+            self.timer_red = self.t
+      if abs(self.red_ball.y) > self.window_coordinates-20:
         self.red_ball.ystep *= -1
-      if abs(self.red_ball.x*self.window_coordinates) > self.window_coordinates:
+      if abs(self.red_ball.x) > self.window_coordinates:
         self.old_red_ball_speed =  self.red_ball_colision/10*abs(self.ball.xstep) + self.initial_speed
         self.red_ball = Ball(0,0,self.ball_radius, self.old_red_ball_speed, 1)
       self.red_ball.x += self.red_ball.xstep
@@ -269,7 +300,9 @@ class Main():
         self.reset_time = glutGet(GLUT_ELAPSED_TIME)
         self.remaining_time = self.game_time_limit
         self.hold_time = 0      
-
+        self.timer_red = 0
+        self.delta_time_red = 0
+        
         self.ball.x, self.ball.y = 0,0
         self.ball.ball_speed = self.initial_speed
         self.ball.xstep = self.ball.ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -self.ball.ball_speed*np.cos(np.pi/4)
@@ -362,10 +395,10 @@ class Main():
     glClearColor(0.3, 0.8, 1, 1)
     glutMainLoop()
 
-
-uber_loveable_frog = Main(
-  game_time_limit=20, 
-  window_coordinates=100,
-  initial_speed=5,
-  radius=5
-)
+if __name__ == "__main__":
+  uber_loveable_frog = Main(
+    game_time_limit=30, 
+    player_size =10,
+    initial_speed=3,
+    radius=3.5
+  )
