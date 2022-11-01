@@ -208,12 +208,17 @@ class Main():
 
       if self.ball.x > 0:
         condicao_x = abs(self.ball.x) + abs(self.ball.xstep) >= self.window_coordinates-self.player2.width/2
-        is_y_above_bottom = abs(self.ball.y) + self.ball.radius >= abs(self.player2.y) - self.player2.height/2
-        is_y_below_top = abs(self.ball.y)  - self.ball.radius <= abs(self.player2.y) + self.player2.height/2
+        if self.ball.y > 0:
+          is_y_above_bottom = (self.ball.y) + self.ball.radius >= (self.player2.y) - self.player2.height/2
+          is_y_below_top = (self.ball.y)  - self.ball.radius <= (self.player2.y) + self.player2.height/2
+        else:
+          is_y_above_bottom = -self.ball.y - self.ball.radius <= -self.player2.y + self.player2.height/2
+          is_y_below_top = -self.ball.y  + self.ball.radius >= -self.player2.y - self.player2.height/2
+
         condicao_y = is_y_above_bottom and is_y_below_top
 
-        if condicao_x and condicao_y:
-            self.ball.xstep = -(self.ball_colision/10*abs(self.ball.xstep) + self.initial_speed)
+        if condicao_x and condicao_y:            
+            self.ball.xstep = -(self.ball_colision/10*abs(self.initial_speed) + self.initial_speed)
             self.ball_colision += 1        
             self.red_ball.xstep *= 1.15
             self.ball.x -= 1

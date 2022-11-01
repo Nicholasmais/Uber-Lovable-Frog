@@ -13,8 +13,8 @@ class Ball():
     self.points = 50
     self.ball_speed = s
     _y_direction = random.choice([np.pi/(i/10) for i in range(25,150)])
-    self.xstep = self.ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else -self.ball_speed*np.cos(np.pi/4)
-    self.ystep = self.ball_speed*(np.sin(_y_direction)) if random.randint(0,1) == 1 else -self.ball_speed*(np.sin(_y_direction))
+    self.xstep = self.ball_speed*np.cos(np.pi/4) if random.randint(0,1) == 1 else self.ball_speed*np.cos(np.pi/4)
+    self.ystep = self.ball_speed*(np.sin(_y_direction)) if random.randint(0,1) == 1 else self.ball_speed*(np.sin(_y_direction))
 
   def _draw_ball_(self):
     if self.red:
